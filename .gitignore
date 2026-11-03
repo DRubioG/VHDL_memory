@@ -10,3 +10,8 @@ XPM_Compatible/FIFO/src/work/_NVC_LIB
 XPM_Compatible/FIFO/src/work/WORK.FIFO
 XPM_Compatible/FIFO/src/work/WORK.FIFO-RTL
 FIFO/src/__FIFO_generic.vhd
+FIFO/sim/work/WORK.FIFO_ASYNC
+FIFO/sim/work/WORK.FIFO_ASYNC_TB
+FIFO/sim/work/WORK.FIFO_ASYNC_TB-BENCH
+FIFO/sim/work/WORK.FIFO_ASYNC_TB.elab
+FIFO/sim/work/WORK.FIFO_ASYNC-RTL

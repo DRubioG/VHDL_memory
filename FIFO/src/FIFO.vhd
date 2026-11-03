@@ -50,8 +50,8 @@ begin
 
       FIFO_ASYNC_inst : entity work.FIFO_ASYNC
         generic map(
-          G_DATA_WIDTH => G_WIDTH,
-          G_FIFO_DEPTH => G_DEPTH
+          G_WIDTH => G_WIDTH,
+          G_DEPTH => G_DEPTH
         )
         port map
         (
