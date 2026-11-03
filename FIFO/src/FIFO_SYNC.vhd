@@ -57,9 +57,7 @@ begin
         r_cont_write <= 0;
         r_cont_read  <= 0;
         r_diff       <= 0;
-        for i in 0 to G_DEPTH - 1 loop
-          r_fifo_rom(i) <= (others => '0');
-        end loop;
+        r_fifo_rom   <= (others => (others => '0'));
 
       elsif EN_I = '1' then
 
