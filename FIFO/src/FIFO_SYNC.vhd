@@ -1,74 +1,101 @@
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-use ieee.math_real.all;
 
 entity FIFO_SYNC is
   generic (
+    --! Tamaño de los datos de entrada y saldia del FIFO.
     G_WIDTH : integer := 8;
+    --! Profundidad de datos del FIFO.
     G_DEPTH : integer := 32
   );
   port (
-    CLK_I   : in std_logic;
+    --! Reloj de entrada del FIFO.
+    CLK_I : in std_logic;
+    --! Reset de entrada del módulo. Activo a nivel bajo.
     RST_N_I : in std_logic;
-    EN_I    : in std_logic;
-    DATA_I  : in std_logic_vector(G_WIDTH - 1 downto 0);
-    READ_I  : in std_logic;
-    DATA_O  : out std_logic_vector(G_WIDTH - 1 downto 0);
+    --! Habilitación del módulo. Activo a nivel alto.
+    EN_I : in std_logic;
+    --! Dato de entrada al FIFO.
+    DATA_I : in std_logic_vector(G_WIDTH - 1 downto 0);
+    --! Indicación de lectura de datos del FIFO. Activo a nivel alto.
+    READ_I : in std_logic;
+    --! Dato de salida del FIFO.
+    DATA_O : out std_logic_vector(G_WIDTH - 1 downto 0);
+    --! Indicación de escritura del FIFO. Activo a nivel alto.
     WRITE_I : in std_logic;
+    --! Indicador de que el FIFO está vació. Activo a nivel alto.
     EMPTY_O : out std_logic;
-    FULL_O  : out std_logic
+    --! Indicador de que el FIFO está completo. Activo a nivel alto.
+    FULL_O : out std_logic
   );
 end entity FIFO_SYNC;
 
 architecture rtl of FIFO_SYNC is
-
-  type t_mem is array (0 to G_DEPTH-1) of std_logic_vector(7 downto 0);
-
-  signal r_mem : t_mem;
-
-  signal r_wr_ptr : integer range 0 to G_DEPTH;
-  signal r_rd_ptr : integer range 0 to G_DEPTH;
-  signal r_count  : integer range 0 to G_DEPTH;
-
-  
+  --! Generador de la memoria del FIFO.
+  type t_mem is array (0 to G_DEPTH - 1) of std_logic_vector(G_WIDTH - 1 downto 0);
+  --! Memoria del FIFO.
+  signal r_fifo_rom : t_mem;
+  --! Dirección de escritura del FIFO.
+  signal r_cont_write : integer range 0 to G_DEPTH - 1;
+  --! Dirección de lectura del FIFO.
+  signal r_cont_read : integer range 0 to G_DEPTH - 1;
+  --! Dirección diferencia entre escritura y lectura.
+  signal r_diff : integer range 0 to G_DEPTH;
 
 begin
-  process (CLK_I)
+
+  --! Asignación del dato de salida para que siempre haya una dato en el puerto de salida 
+  --! y no tener que mandar la orden de lectura para leer.
+  DATO_SALIDA : DATA_O <= r_fifo_rom(r_cont_read);
+
+  --! Este process controla el FIFO. Por eso tiene dos partes, una de lectura y
+  --! otra de escritura.
+  FIFO_PROCESS : process (CLK_I)
   begin
     if rising_edge(CLK_I) then
-
       if RST_N_I = '0' then
-
-        r_wr_ptr   <= 0;
-        r_rd_ptr   <= 0;
-        r_count    <= 0;
-        DATA_O <= (others => '0');
+        r_cont_write <= 0;
+        r_cont_read  <= 0;
+        r_diff       <= 0;
+        for i in 0 to G_DEPTH - 1 loop
+          r_fifo_rom(i) <= (others => '0');
+        end loop;
 
       elsif EN_I = '1' then
-        if WRITE_I = '1' and r_count < G_DEPTH then
-          r_mem(r_wr_ptr) <= DATA_I;
-          r_wr_ptr      <= (r_wr_ptr + 1) mod G_DEPTH;
-        end if;
 
-        if READ_I = '1' and r_count > 0 then
-          DATA_O <= r_mem(r_rd_ptr);
-          r_rd_ptr   <= (r_rd_ptr + 1) mod G_DEPTH;
-        end if;
+        -- Escritura
+        if WRITE_I = '1' and r_diff < G_DEPTH then
+          r_fifo_rom(r_cont_write) <= DATA_I;
 
-        if WRITE_I = '1' and r_count < G_DEPTH and not (READ_I = '1' and r_count > 0) then
-          r_count <= r_count + 1;
-        elsif READ_I = '1' and r_count > 0 and not (WRITE_I = '1' and r_count < G_DEPTH) then
-          r_count <= r_count - 1;
-        end if;
+          if r_cont_write = G_DEPTH - 1 then
+            r_cont_write <= 0;
+          else
+            r_cont_write <= r_cont_write + 1;
+          end if;
 
+          r_diff <= r_diff + 1;
+        end if;
+        -- Lectura
+        if READ_I = '1' and r_diff > 0 then
+
+          if r_cont_read = G_DEPTH - 1 then
+            r_cont_read <= 0;
+          else
+            r_cont_read <= r_cont_read + 1;
+          end if;
+
+          r_diff <= r_diff - 1;
+        end if;
       end if;
     end if;
   end process;
 
-  EMPTY_O <= '1' when r_count = 0 else
-    '0';
-  FULL_O <= '1' when r_count = G_DEPTH else
-    '0';
+  --! Esto genera la señal que indica que el FIFO está vacío.
+  EMPTY_ASSIGN : EMPTY_O <= '1' when r_diff = 0 else
+  '0';
+
+  --! Esto genera la señal que indica que el FIFO está completo.
+  FULL_ASSIGN : FULL_O <= '1' when r_diff = G_DEPTH else
+  '0';
 
 end architecture;

@@ -50,7 +50,7 @@ begin
   process begin
     wait for 1 us;
     r_cont <= r_cont + 1;
-    if r_cont >= 2 ** G_WIDTH - 1 then
+    if r_cont >= G_DEPTH then
       r_cont <= 0;
     end if;
   end process;
