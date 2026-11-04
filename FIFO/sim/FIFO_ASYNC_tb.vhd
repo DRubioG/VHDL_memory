@@ -22,7 +22,7 @@ architecture bench of FIFO_ASYNC_tb is
   signal READ_I      : std_logic;
   signal DATA_O      : std_logic_vector(G_WIDTH - 1 downto 0);
   signal EMPTY_O     : std_logic;
-  signal r_cont      : integer range 0 to 2 ** G_WIDTH := 0;
+  signal r_cont      : integer := 0;
   signal s_block     : std_logic;
 begin
 
@@ -50,9 +50,9 @@ begin
   process begin
     wait for 1 us;
     r_cont <= r_cont + 1;
-    if r_cont >= G_DEPTH then
-      r_cont <= 0;
-    end if;
+    -- if r_cont >= G_DEPTH then
+    --   r_cont <= 0;
+    -- end if;
   end process;
 
   process begin
@@ -77,7 +77,7 @@ begin
     wait for 1 us;
     for i in 0 to G_DEPTH loop
       READ_I <= '1';
-      wait for 3 * clk_period;
+      wait for 3 * clk_period*32;
       READ_I <= '0';
       wait for 1 us;
     end loop;

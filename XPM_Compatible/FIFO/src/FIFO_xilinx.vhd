@@ -10,8 +10,6 @@ entity FIFO_Xilinx is
     G_WIDTH : integer := 8;
     --! Profundidad del FIFO.
     G_DEPTH : integer := 32;
-    --! Latencia en la lectura de salida del dato.
-    G_LATENCY : integer range 0 to 100 := 2;
     --! Indicador si el FIFO es sincrono o asíncrono.
     --! Opciones:
     --! "SYNC": síncrono.
@@ -49,14 +47,18 @@ end entity;
 
 architecture rtl of FIFO_Xilinx is
 
+  --! Señal utilizada para negar el reset.
   signal s_rst : std_logic;
 
 begin
 
-  s_rst <= not RST_N_I;
+  --! Negación del reset. Esto es debido a que los módulos de Xilinx utilizan un reset a nivel alto.
+  RESET : s_rst <= not RST_N_I;
 
+  --! Este generate selecciona el módulo XPM de Xilinx a utilizar dependiendo del tipo de FIFO.
   FIFO_TYPE_GEN : if G_FIFO_TYPE = "SYNC" generate
 
+    --! Instanciación del FIFO síncrono.
     U_FIFO : xpm_fifo_sync
     generic map(
       FIFO_MEMORY_TYPE  => "auto",
@@ -97,6 +99,7 @@ begin
 
   elsif G_FIFO_TYPE = "ASYNC" generate
 
+      --! Instanciación del FIFO asíncrono.
       xpm_fifo_async_inst : xpm_fifo_async
       generic map(
         CDC_SYNC_STAGES   => 2,
@@ -138,4 +141,5 @@ begin
       );
 
     end generate;
+    
   end architecture;

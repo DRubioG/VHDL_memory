@@ -3,10 +3,10 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity FIFO_SYNC_tb is
+entity FIFO_SYNC_Xilinx_tb is
 end;
 
-architecture bench of FIFO_SYNC_tb is
+architecture bench of FIFO_SYNC_Xilinx_tb is
   -- Clock period
   constant clk_period : time := 5 ns;
   -- Generics

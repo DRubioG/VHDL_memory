@@ -7,8 +7,6 @@ entity FIFO is
     G_WIDTH : integer := 8;
     --! Profundidad del FIFO.
     G_DEPTH : integer := 32;
-    --! Latencia en la lectura de salida del dato.
-    G_LATENCY : integer range 0 to 100 := 2;
     --! Indicador si el FIFO es sincrono o asíncrono.
     --! Opciones:
     --! "SYNC": síncrono.

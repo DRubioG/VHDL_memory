@@ -24,3 +24,12 @@ XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_TB-BENCH
 XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_TB.elab
 XPM_Compatible/FIFO/sim/work/WORK.FIFO_XILINX
 XPM_Compatible/FIFO/sim/work/WORK.FIFO_XILINX-RTL
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_TB
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_TB-BENCH
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_TB.elab
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_XILINX_TB
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_XILINX_TB-BENCH
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_XILINX_TB.elab
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_XILINX_TB
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_XILINX_TB-BENCH
+XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_XILINX_TB.elab

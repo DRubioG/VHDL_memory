@@ -7,8 +7,6 @@ entity top is
     G_WIDTH : integer := 8;
     --! Profundidad del FIFO.
     G_DEPTH : integer := 32;
-    --! Latencia en la lectura de salida del dato.
-    G_LATENCY : integer range 0 to 100 := 2;
     --! Indicador si el FIFO es sincrono o asíncrono.
     --! Opciones:
     --! "SYNC": síncrono.
@@ -62,8 +60,7 @@ begin
       generic map(
         G_WIDTH     => G_WIDTH,
         G_DEPTH     => G_DEPTH,
-        G_FIFO_TYPE => G_FIFO_TYPE,
-        G_LATENCY   => G_LATENCY
+        G_FIFO_TYPE => G_FIFO_TYPE
       )
       port map
       (
@@ -88,8 +85,7 @@ begin
         generic map(
           G_WIDTH     => G_WIDTH,
           G_DEPTH     => G_DEPTH,
-          G_FIFO_TYPE => G_FIFO_TYPE,
-          G_LATENCY   => G_LATENCY
+          G_FIFO_TYPE => G_FIFO_TYPE
         )
         port map
         (
