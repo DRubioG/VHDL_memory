@@ -52,17 +52,20 @@ begin
   WRITE_PROCESS : process (CLK_I)
   begin
     if rising_edge(CLK_I) then
+      if RST_N_I = '0' then
+        r_mem <= (others => (others => '0'));
+      elsif EN_I = '1' then
+        -- Escritura puerto A
+        if WE_A_I = '1' then
+          r_mem(to_integer(unsigned(ADDR_A_I))) <= DATA_WRITE_A_I;
+        end if;
 
-      -- Escritura puerto A
-      if WE_A_I = '1' then
-        r_mem(to_integer(unsigned(ADDR_A_I))) <= DATA_WRITE_A_I;
+        -- Escritura puerto B
+        if WE_B_I = '1' then
+          r_mem(to_integer(unsigned(ADDR_B_I))) <= DATA_WRITE_B_I;
+        end if;
+
       end if;
-
-      -- Escritura puerto B
-      if WE_B_I = '1' then
-        r_mem(to_integer(unsigned(ADDR_B_I))) <= DATA_WRITE_B_I;
-      end if;
-
     end if;
   end process;
 

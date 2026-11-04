@@ -47,8 +47,12 @@ begin
   WRITE_PROCESS : process (CLK_I)
   begin
     if rising_edge(CLK_I) then
-      if WE_I = '1' then
-        r_mem(to_integer(unsigned(ADDR_WRITE_I))) <= DATA_WRITE_I;
+      if RST_N_I = '0' then
+        r_mem <= (others => (others => '0'));
+      elsif EN_I = '1' then
+        if WE_I = '1' then
+          r_mem(to_integer(unsigned(ADDR_WRITE_I))) <= DATA_WRITE_I;
+        end if;
       end if;
     end if;
   end process;

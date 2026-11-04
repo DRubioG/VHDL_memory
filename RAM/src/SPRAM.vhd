@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 use ieee.math_real.all;
 
-entity SPRAM is
+entity SRAM is
   generic (
     --! Tamaño de los datos.
     G_WIDTH : integer := 8;
@@ -22,13 +22,13 @@ entity SPRAM is
     --! Dirección de escritura/lectura de la RAM.
     ADDRESS_I : in std_logic_vector(integer(ceil(log2(real(G_DEPTH)))) - 1 downto 0);
     --! Dato de escritura en la RAM.
-    DATA_WRITE_I : in std_logic_vector(G_WIDTH - 1 downto 0);
+    DATA_I : in std_logic_vector(G_WIDTH - 1 downto 0);
     --! Dato leído de la RAM.
-    DATA_READ_O : out std_logic_vector(G_WIDTH - 1 downto 0)
+    DATA_O : out std_logic_vector(G_WIDTH - 1 downto 0)
   );
-end SPRAM;
+end SRAM;
 
-architecture Behavioral of SPRAM is
+architecture Behavioral of SRAM is
 
   --! Generación de la memoria RAM.
   type t_ram is array (0 to G_DEPTH - 1) of std_logic_vector(G_WIDTH - 1 downto 0);
@@ -46,13 +46,13 @@ begin
         r_mem <= (others => (others => '0'));
       elsif EN_I = '1' then
         if WE_I = '1' then
-          r_mem(to_integer(unsigned(ADDRESS_I))) <= DATA_WRITE_I;
+          r_mem(to_integer(unsigned(ADDRESS_I))) <= DATA_I;
         end if;
       end if;
     end if;
   end process;
 
   --! El dato leído de la RAM.
-  DATO_SALIDA : DATA_READ_O <= r_mem(to_integer(unsigned(ADDRESS_I)));
+  DATO_SALIDA : DATA_O <= r_mem(to_integer(unsigned(ADDRESS_I)));
 
 end Behavioral;

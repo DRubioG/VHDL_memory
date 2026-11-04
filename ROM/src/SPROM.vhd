@@ -8,7 +8,7 @@ entity SPROM is
     --! Tamaño de los datos.
     G_WIDTH : integer := 8;
     --! Profundidad de la ROM.
-    G_DEPTH : integer := 32
+    G_DEPTH : integer := 16
   );
   port (
     --! Reloj de entrada de la ROM.
@@ -32,13 +32,13 @@ architecture Behavioral of SPROM is
   constant r_mem : t_rom := (
   0  => "00000001",
   1  => "00000010",
-  2  => "00000011",
-  3  => "00000100",
+  2  => "00100011",
+  3  => "01000100",
   4  => "00000101",
-  5  => "00000110",
+  5  => "01000110",
   6  => "00000111",
-  7  => "00001000",
-  8  => "00001001",
+  7  => "00101000",
+  8  => "01101001",
   9  => "00001010",
   10 => "00001011",
   11 => "00001100",

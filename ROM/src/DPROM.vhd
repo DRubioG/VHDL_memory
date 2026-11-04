@@ -8,7 +8,7 @@ entity DPROM is
     --! Tamaño de los datos.
     G_WIDTH : integer := 8;
     --! Profundidad de la ROM.
-    G_DEPTH : integer := 32
+    G_DEPTH : integer := 16
   );
   port (
     --! Reloj de entrada de la ROM.
@@ -39,9 +39,9 @@ architecture Behavioral of DPROM is
   0  => "00000001",
   1  => "00000010",
   2  => "00000011",
-  3  => "00000100",
-  4  => "00000101",
-  5  => "00000110",
+  3  => "01000100",
+  4  => "11000101",
+  5  => "01000110",
   6  => "00000111",
   7  => "00001000",
   8  => "00001001",

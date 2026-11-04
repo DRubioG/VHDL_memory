@@ -12,7 +12,7 @@ architecture bench of SRAM_tb is
   constant clk_period : time := 5 ns;
   -- Generics
   constant G_WIDTH : integer := 8;
-  constant G_DEPTH : integer := 64;
+  constant G_DEPTH : integer := 32;
   -- Ports
   signal CLK_I     : std_logic := '0';
   signal RST_N_I   : std_logic;
@@ -24,7 +24,7 @@ architecture bench of SRAM_tb is
   signal s_block   : std_logic;
 begin
 
-  SRAM_inst : entity work.SPRAM
+  SRAM_inst : entity work.SRAM
     generic map(
       G_WIDTH => G_WIDTH,
       G_DEPTH => G_DEPTH
@@ -36,8 +36,8 @@ begin
       EN_I      => '1',
       WE_I      => WE_I,
       ADDRESS_I => ADDRESS_I,
-      DATA_WRITE_I    => DATA_I,
-      DATA_READ_O    => DATA_O
+      DATA_I    => DATA_I,
+      DATA_O    => DATA_O
     );
   CLK_I   <= not CLK_I after clk_period/2;
   RST_N_I <= '0', '1' after 50 ns;

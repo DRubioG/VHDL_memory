@@ -1,12 +1,15 @@
 # VHDL_memory
 This repo contains all types of memories for VHDL
 
+
 ## FIFO
 ### SYNC
 ![Sincrono](./img/FIFO_SYNC.png)
 
+
 ### ASYNC
 ![Asincrono](./img/FIFO_ASYNC.png)
+
 
 ## RAM
 ### SPRAM (Simple Port RAM)
@@ -23,13 +26,14 @@ This module has 1 clock.
 ![DPRAM](./img/DPRAM.png)
 
 
-### TDPRAM (True Dual Port RAM)
-This module has 2 different clocks.
-![TDPRAM](./img/TDPRAM.png)
-
 ## ROM
 ### SPROM (Single Port ROM)
 ![SPROM](./img/SPROM.png)
 
+
 ### DPROM (Dual Port ROM)
 ![DPROM](./img/DPROM.png)
+
+
+#### Replace this part with the ROM values.
+![rep_rom](./img/rep_ROM.png)
