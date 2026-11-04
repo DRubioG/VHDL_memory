@@ -26,3 +26,10 @@ This module has 1 clock.
 ### TDPRAM (True Dual Port RAM)
 This module has 2 different clocks.
 ![TDPRAM](./img/TDPRAM.png)
+
+## ROM
+### SPROM (Single Port ROM)
+![SPROM](./img/SPROM.png)
+
+### DPROM (Dual Port ROM)
+![DPROM](./img/DPROM.png)
