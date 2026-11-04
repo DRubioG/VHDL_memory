@@ -7,6 +7,8 @@ entity FIFO is
     G_WIDTH : integer := 8;
     --! Profundidad del FIFO.
     G_DEPTH : integer := 32;
+    --! Latencia en la lectura de salida del dato.
+    G_LATENCY : integer range 0 to 100 := 2;
     --! Indicador si el FIFO es sincrono o asíncrono.
     --! Opciones:
     --! "SYNC": síncrono.
@@ -19,10 +21,10 @@ entity FIFO is
     CLK_SYNC_I : in std_logic;
     --! Reloj para la escritura en el FIFO. Este puerto solo funciona cuando
     --! el G_FIFO_TYPE es "ASYNC".
-    CLKA_I : in std_logic;
+    CLK_WRITE_I : in std_logic;
     --! Reloj para la lectura del FIFO. Este puerto solo funciona cuando
     --! el G_FIFO_TYPE es "ASYNC".
-    CLKB_I : in std_logic;
+    CLK_READ_I : in std_logic;
     --! Reset del FIFO. Activo a nivel bajo.
     RST_N_I : in std_logic;
     --! Habilitación del FIFO. Activo a nivel alto.
@@ -52,8 +54,8 @@ begin
     --! Instanciación del FIFO síncrono.
     FIFO_SYNC_inst : entity work.FIFO_SYNC
       generic map(
-        G_WIDTH => G_WIDTH,
-        G_DEPTH => G_DEPTH
+        G_WIDTH   => G_WIDTH,
+        G_DEPTH   => G_DEPTH
       )
       port map
       (
@@ -80,11 +82,11 @@ begin
         (
           RST_N_I     => RST_N_I,
           EN_I        => EN_I,
-          CLK_WRITE_I => CLKA_I,
+          CLK_WRITE_I => CLK_WRITE_I,
           DATA_I      => DATA_I,
           WRITE_I     => WRITE_I,
           FULL_O      => FULL_O,
-          CLK_READ_I  => CLKB_I,
+          CLK_READ_I  => CLK_READ_I,
           READ_I      => READ_I,
           DATA_O      => DATA_O,
           EMPTY_O     => EMPTY_O

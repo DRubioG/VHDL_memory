@@ -41,59 +41,56 @@ architecture rtl of FIFO_SYNC is
   signal r_cont_read : integer range 0 to G_DEPTH - 1;
   --! Dirección diferencia entre escritura y lectura.
   signal r_diff : integer range 0 to G_DEPTH;
-
+  
 begin
 
-  --! Asignación del dato de salida para que siempre haya una dato en el puerto de salida 
-  --! y no tener que mandar la orden de lectura para leer.
-  DATO_SALIDA : DATA_O <= r_fifo_rom(r_cont_read);
+    --! Este process controla el FIFO. Por eso tiene dos partes, una de lectura y
+    --! otra de escritura.
+    FIFO_PROCESS : process (CLK_I)
+    begin
+      if rising_edge(CLK_I) then
+        if RST_N_I = '0' then
+          r_cont_write <= 0;
+          r_cont_read  <= 0;
+          r_diff       <= 0;
+          r_fifo_rom   <= (others => (others => '0'));
+          DATA_O     <= (others => '0');
+        elsif EN_I = '1' then
 
-  --! Este process controla el FIFO. Por eso tiene dos partes, una de lectura y
-  --! otra de escritura.
-  FIFO_PROCESS : process (CLK_I)
-  begin
-    if rising_edge(CLK_I) then
-      if RST_N_I = '0' then
-        r_cont_write <= 0;
-        r_cont_read  <= 0;
-        r_diff       <= 0;
-        r_fifo_rom   <= (others => (others => '0'));
+          -- Escritura
+          if WRITE_I = '1' and r_diff < G_DEPTH then
+            r_fifo_rom(r_cont_write) <= DATA_I;
 
-      elsif EN_I = '1' then
+            if r_cont_write = G_DEPTH - 1 then
+              r_cont_write <= 0;
+            else
+              r_cont_write <= r_cont_write + 1;
+            end if;
 
-        -- Escritura
-        if WRITE_I = '1' and r_diff < G_DEPTH then
-          r_fifo_rom(r_cont_write) <= DATA_I;
-
-          if r_cont_write = G_DEPTH - 1 then
-            r_cont_write <= 0;
-          else
-            r_cont_write <= r_cont_write + 1;
+            r_diff <= r_diff + 1;
           end if;
 
-          r_diff <= r_diff + 1;
-        end if;
-        -- Lectura
-        if READ_I = '1' and r_diff > 0 then
+          -- Lectura
+          if READ_I = '1' and r_diff > 0 then
+            DATA_O <= r_fifo_rom(r_cont_read);
+            if r_cont_read = G_DEPTH - 1 then
+              r_cont_read <= 0;
+            else
+              r_cont_read <= r_cont_read + 1;
+            end if;
 
-          if r_cont_read = G_DEPTH - 1 then
-            r_cont_read <= 0;
-          else
-            r_cont_read <= r_cont_read + 1;
+            r_diff <= r_diff - 1;
           end if;
-
-          r_diff <= r_diff - 1;
         end if;
       end if;
-    end if;
-  end process;
+    end process;
 
-  --! Esto genera la señal que indica que el FIFO está vacío.
-  EMPTY_ASSIGN : EMPTY_O <= '1' when r_diff = 0 else
-  '0';
+    --! Esto genera la señal que indica que el FIFO está vacío.
+    EMPTY_ASSIGN : EMPTY_O <= '1' when r_diff = 0 else
+    '0';
 
-  --! Esto genera la señal que indica que el FIFO está completo.
-  FULL_ASSIGN : FULL_O <= '1' when r_diff = G_DEPTH else
-  '0';
+    --! Esto genera la señal que indica que el FIFO está completo.
+    FULL_ASSIGN : FULL_O <= '1' when r_diff = G_DEPTH else
+    '0';
 
-end architecture;
+  end architecture;

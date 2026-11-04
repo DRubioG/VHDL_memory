@@ -6,19 +6,44 @@ use xpm.vcomponents.all;
 
 entity FIFO_Xilinx is
   generic (
-    G_WIDTH     : integer := 8;
-    G_DEPTH     : integer := 32;
-    G_FIFO_TYPE : string  := "SYNC"
+    --! Tamaño de los datos del FIFO.
+    G_WIDTH : integer := 8;
+    --! Profundidad del FIFO.
+    G_DEPTH : integer := 32;
+    --! Latencia en la lectura de salida del dato.
+    G_LATENCY : integer range 0 to 100 := 2;
+    --! Indicador si el FIFO es sincrono o asíncrono.
+    --! Opciones:
+    --! "SYNC": síncrono.
+    --! "ASYNC": asíncrono.
+    G_FIFO_TYPE : string := "SYNC"
   );
   port (
-    CLK_I   : in std_logic;
+    --! Reloj de entrada para el FIFO síncrono. Este puerto solo funciona
+    --! cuando el G_FIFO_TYPE es "SYNC"".
+    CLK_SYNC_I : in std_logic;
+    --! Reloj para la escritura en el FIFO. Este puerto solo funciona cuando
+    --! el G_FIFO_TYPE es "ASYNC".
+    CLK_WRITE_I : in std_logic;
+    --! Reloj para la lectura del FIFO. Este puerto solo funciona cuando
+    --! el G_FIFO_TYPE es "ASYNC".
+    CLK_READ_I : in std_logic;
+    --! Reset del FIFO. Activo a nivel bajo.
     RST_N_I : in std_logic;
-    DATA_I  : in std_logic_vector(7 downto 0);
+    --! Habilitación del FIFO. Activo a nivel alto.
+    EN_I : in std_logic;
+    --! Indicador de escritura en el FIFO. Activo a nivel alto.
     WRITE_I : in std_logic;
-    READ_I  : in std_logic;
-    DATA_O  : out std_logic_vector(7 downto 0);
+    --! Dato a escribir en el FIFO.
+    DATA_I : in std_logic_vector(G_WIDTH - 1 downto 0);
+    --! Indicador de lectura del FIFO. Activo a nivel alto.
+    READ_I : in std_logic;
+    --! Dato leído del FIFO.
+    DATA_O : out std_logic_vector(G_WIDTH - 1 downto 0);
+    --! Indicador de que el FIFO está vacío.  Activo a nivel alto.
     EMPTY_O : out std_logic;
-    FULL_O  : out std_logic
+    --! Indicador de que el FIFO está completo. Activo a nivel alto.
+    FULL_O : out std_logic
   );
 end entity;
 
@@ -39,20 +64,20 @@ begin
       WRITE_DATA_WIDTH  => G_WIDTH,
       READ_DATA_WIDTH   => G_WIDTH,
       READ_MODE         => "std",
-      FIFO_READ_LATENCY => 1,
+      FIFO_READ_LATENCY => 0,
       USE_ADV_FEATURES  => "0000"
     )
     port map
     (
       sleep         => '0',
       rst           => s_rst,
-      wr_clk        => CLK_I,
+      wr_clk        => CLK_SYNC_I,
       wr_en         => WRITE_I,
       din           => DATA_I,
       full          => FULL_O,
       rd_en         => READ_I,
       dout          => DATA_O,
-      empty         => EMPTY_I,
+      empty         => EMPTY_O,
       data_valid    => open,
       overflow      => open,
       underflow     => open,
@@ -85,7 +110,7 @@ begin
       port map
       (
         sleep         => '0',
-        wr_clk        => wr_clk,
+        wr_clk        => CLK_WRITE_I,
         rst           => s_rst,
         wr_rst_busy   => open,
         wr_en         => WRITE_I,
@@ -96,12 +121,12 @@ begin
         almost_full   => open,
         overflow      => open,
         wr_data_count => open,
-        rd_clk        => rd_clk,
-        rd_rst_busy   => rd_rst_busy,
+        rd_clk        => CLK_READ_I,
+        rd_rst_busy   => open,
         rd_en         => READ_I,
         dout          => DATA_O,
         data_valid    => open,
-        empty         => EMPTY_I,
+        empty         => EMPTY_O,
         prog_empty    => open,
         almost_empty  => open,
         underflow     => open,
