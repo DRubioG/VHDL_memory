@@ -33,3 +33,10 @@ XPM_Compatible/FIFO/sim/work/WORK.FIFO_ASYNC_XILINX_TB.elab
 XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_XILINX_TB
 XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_XILINX_TB-BENCH
 XPM_Compatible/FIFO/sim/work/WORK.FIFO_SYNC_XILINX_TB.elab
+RAM/sim/work/_index
+RAM/sim/work/_NVC_LIB
+RAM/sim/work/WORK.SRAM
+RAM/sim/work/WORK.SRAM_TB
+RAM/sim/work/WORK.SRAM_TB-BENCH
+RAM/sim/work/WORK.SRAM_TB.elab
+RAM/sim/work/WORK.SRAM-BEHAVIORAL
