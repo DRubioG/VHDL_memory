@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 use ieee.math_real.all;
 
-entity SRAM is
+entity SPRAM is
   generic (
     --! Tamaño de los datos.
     G_WIDTH : integer := 8;
@@ -26,9 +26,9 @@ entity SRAM is
     --! Dato leído de la RAM.
     DATA_O : out std_logic_vector(G_WIDTH - 1 downto 0)
   );
-end SRAM;
+end SPRAM;
 
-architecture Behavioral of SRAM is
+architecture Behavioral of SPRAM is
 
   --! Generación de la memoria RAM.
   type t_ram is array (0 to G_DEPTH - 1) of std_logic_vector(G_WIDTH - 1 downto 0);

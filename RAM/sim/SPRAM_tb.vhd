@@ -24,7 +24,7 @@ architecture bench of SRAM_tb is
   signal s_block   : std_logic;
 begin
 
-  SRAM_inst : entity work.SRAM
+  SRAM_inst : entity work.SPRAM
     generic map(
       G_WIDTH => G_WIDTH,
       G_DEPTH => G_DEPTH
