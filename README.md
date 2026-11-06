@@ -25,6 +25,10 @@ This module has 1 clock.
 This module has 1 clock.
 ![DPRAM](./img/DPRAM.png)
 
+### TDPRAM (True Dual Port RAM) <- Xilinx Model
+This model belongs to Xilinx
+![TDPRAM](./img/TDPRAM.png)
+
 
 ## ROM
 ### SPROM (Single Port ROM)
